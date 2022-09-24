@@ -1,0 +1,41 @@
+from collections import deque
+
+
+def change(lv,equation):
+    if not equation:
+        return
+
+    if equation[0] == "+" or equation[0] == "-":
+        if lv == 1:
+            imsi = equation.popleft()
+            change(1,equation)
+            answer.append(imsi)
+        else:
+            return
+    elif equation[0] == "*" or equation[0] == "/":
+            imsi = equation.popleft()
+            change(2, equation)
+            answer.append(imsi)
+
+    elif equation[0] == "(":
+        equation.popleft()
+        change(1,equation)
+
+    elif equation[0] == ")":
+        equation.popleft()
+        change(2,equation)
+
+    else:
+        answer.append(equation.popleft())
+        change(lv,equation)
+    return
+
+
+infix = list(input())
+answer = []
+infix = deque(map(str,infix))
+
+while infix:
+    change(1,infix)
+    print(''.join(answer),end = '')
+    answer = []
