@@ -1,22 +1,41 @@
 import sys
 
-N, K = map(int, input().split())
-stuff = [[0,0]]
-knapsack = [[0 for _ in range(K + 1)] for _ in range(N + 1)]
 
-for _ in range(N):
-    stuff.append(list(map(int, input().split())))
+N,K = map(int,sys.stdin.readline().split())
+## 물품의 수, 버틸 수 있는 무게
+
+things = [[0 for _ in range(K+1)] for _ in range(N+1)]
+'''
+1. 최대 100,000의 크기를 가진 배열을 만든다.
+2. 해당 배열을 물품의 수 만큼 만든다. 
+-> why? 물품을 돌면서 생기는 그때그때의 최대값을 저장하기 위해서 + 중복되지 않기 위해
+3. 만약 배열의 무게가 현재 물품의 무게 보다 높다면 해당 물품의 무게 or 해당물품의 무게 + 남는 물품의 무게의 최대값
+중에서 높은 것을 선택한다.
+'''
+
+w = [(0,0)]
+
+for i in range(N):
+    W,V = map(int,sys.stdin.readline().split())
+    w.append((W,V))
 
 
-#냅색 문제 풀이
-for i in range(1, N + 1):
-    for j in range(1, K + 1):
-        weight = stuff[i][0] 
-        value = stuff[i][1]
-       
-        if j < weight:
-            knapsack[i][j] = knapsack[i - 1][j] #weight보다 작으면 위의 값을 그대로 가져온다
+
+for i in range(1,N+1):
+    weight,value = w[i]
+
+    for k in range(K+1):
+        if weight <= k:
+            things[i][k] = max(things[i-1][k],value + things[i-1][k-weight])
         else:
-            knapsack[i][j] = max(value + knapsack[i - 1][j - weight], knapsack[i - 1][j])
+            things[i][k] = things[i-1][k]
 
-print(knapsack[N][K])
+
+
+print(things[N][K])
+
+
+
+
+
+
