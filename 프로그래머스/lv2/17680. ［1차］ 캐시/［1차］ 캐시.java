@@ -1,6 +1,10 @@
 import java.util.*;
 class Solution {
     public int solution(int cacheSize, String[] cities) {
+        
+        if(cacheSize == 0){
+            return 5 * cities.length;
+        }
         List<String> cache = new ArrayList<>();
         int count = 0;
         for(String city : cities){
@@ -9,25 +13,18 @@ class Solution {
         }
         int answer = 0;
         for(String city : cities){
-            boolean check = false;
-            for(int i = 0; i < cache.size(); i++){
-                if(city.equals(cache.get(i))){
-                    answer += 1;
-                    cache.remove(i);
-                    cache.add(city);
-                    check = true;
-                    break;
-                }
+            if(cache.contains(city)){
+                answer += 1;
+                cache.remove(cache.indexOf(city));
+                cache.add(city);
             }
-            if(check == false){
-                if(cache.size() == cacheSize && cacheSize != 0){
-                    cache.remove(0);  
-                }
-                if(cacheSize != 0){
-                    cache.add(city);
-                }
-                answer += 5;
-            }        
+            else{
+                answer += 5;  
+                cache.add(city);    
+            }
+            if(cache.size() > cacheSize){
+                cache.remove(0);
+            }
         }
         return answer;
     }
